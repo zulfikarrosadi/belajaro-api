@@ -9,15 +9,7 @@ import {
   updatePost,
   deletePost,
 } from '../repositories/postRepository';
-
-export type defaultResponse = {
-  status: 'success' | 'fail';
-  message?: string;
-  data?: any;
-  error?: {
-    message?: string;
-  };
-};
+import { defaultResponse } from '../global';
 
 type postIDParam = { postID: string };
 type createOrUpdatePost = { post: post; meta: meta };
@@ -33,7 +25,7 @@ export async function getPostsHandler(
 
     return res.status(200).json(response);
   } catch (error: any) {
-    response = { status: 'fail', error: { message: error.message } };
+    response = { status: 'fail', error: { details: error.message } };
     return res.status(400).json(response);
   }
 }
@@ -54,7 +46,7 @@ export async function getPostByIDHandler(
   } catch (error: any) {
     const result: defaultResponse = {
       status: 'fail',
-      error: { message: error.message },
+      error: { details: error.message },
     };
     return res.status(404).json(result);
   }
@@ -73,7 +65,7 @@ export async function createPostHandler(
   } catch (error: any) {
     console.log(error);
 
-    response = { status: 'fail', error: { message: error.message } };
+    response = { status: 'fail', error: { details: error.message } };
     return res.status(400).json(response);
   }
 }
@@ -93,7 +85,7 @@ export async function updatePostHandler(
     response = { status: 'success', data: { postID: updatedPost.id } };
     return res.status(200).json(response);
   } catch (error: any) {
-    response = { status: 'fail', error: { message: error.message } };
+    response = { status: 'fail', error: { details: error.message } };
   }
 }
 
@@ -113,6 +105,6 @@ export async function deletePostHandler(
   } catch (error: any) {
     return res
       .status(404)
-      .json({ status: 'fail', error: { message: error.message } });
+      .json({ status: 'fail', error: { details: error.message } });
   }
 }

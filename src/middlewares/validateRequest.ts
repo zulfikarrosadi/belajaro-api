@@ -1,6 +1,6 @@
 import { AnyZodObject, ZodError } from 'zod';
 import { Request, Response, NextFunction } from 'express';
-import { defaultResponse } from '../globalConstant';
+import { defaultResponse } from '../global';
 
 export function validateRequest(schema: AnyZodObject) {
   return function (
@@ -12,13 +12,11 @@ export function validateRequest(schema: AnyZodObject) {
       schema.parse({ body: req.body });
       return next();
     } catch (error: any) {
-      return res
-        .status(400)
-        .json({
-          status: 'fail',
-          message: 'validation error',
-          error: error.issues,
-        });
+      return res.status(400).json({
+        status: 'fail',
+        message: 'validation error',
+        error: error.issues,
+      });
     }
   };
 }

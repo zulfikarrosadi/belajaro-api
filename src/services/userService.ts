@@ -1,6 +1,6 @@
 import { users } from '@prisma/client';
 import BadRequest from '../errors/badRequestError';
-import { defaultResponse } from '../globalConstant';
+import { defaultResponse } from '../global';
 import { hashPassword } from '../helpers/passwordHelper';
 import { createUser } from '../repositories/userRepository';
 
