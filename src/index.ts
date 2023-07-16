@@ -1,14 +1,14 @@
-import express, { Application } from 'express';
+import express, { Express } from 'express';
 import cors from 'cors';
+import routes from './routes';
 
-import postRouter from './router/postRoute';
-
-const app: Application = express();
+const app: Express = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.listen(3000, () => console.log('http://localhost:3000'));
+app.listen(3000, function () {
+  console.log('running http://localhost:3000');
 
-app.use('/post', postRouter);
+  routes(app);
+});
