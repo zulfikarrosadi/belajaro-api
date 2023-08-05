@@ -4,7 +4,7 @@
   "description": "Platform edukasi untuk menghancurkan batasan batasan dalam belajar",
   "main": "index.js",
   "scripts": {
-    "dev": "npx ts-node-dev --respawn src/index.ts"
+    "dev": "npx ts-node-dev --respawn --transpile-only src/index.ts"
   },
   "keywords": [],
   "author": "",
