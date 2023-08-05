@@ -2,6 +2,7 @@ import { users } from '@prisma/client';
 import { Request, Response } from 'express';
 import { createUserService } from '../services/userService';
 import { defaultResponse } from '../global';
+import { createToken } from '../services/authService';
 
 export async function createUserHandler(
   req: Request<{}, {}, users>,
@@ -9,9 +10,27 @@ export async function createUserHandler(
 ) {
   try {
     const user = await createUserService(req.body);
-    console.log(user);
-    // create session (auth service)
-    return res.status(201).json(user);
+
+    const { accessToken, refreshToken } = createToken({
+      email: user.data.email,
+      id: user.data.id,
+      newRefreshToken: true,
+    });
+
+    return res
+      .status(201)
+      .cookie('accessToken', accessToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        // secure: true,
+      })
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        // secure: true,
+        path: '/auth/refresh',
+      })
+      .json(user);
   } catch (error: any) {
     return res.status(400).json(error);
   }
