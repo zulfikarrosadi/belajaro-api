@@ -8,3 +8,6 @@ export type defaultResponse = {
     details?: string;
   };
 };
+
+export const privateKey = 'my private key';
+export const publicKey = 'my public key';
