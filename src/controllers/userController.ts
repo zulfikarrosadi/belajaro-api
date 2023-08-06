@@ -1,7 +1,7 @@
 import { users } from '@prisma/client';
 import { Request, Response } from 'express';
 import { createUserService } from '../services/userService';
-import { defaultResponse } from '../global';
+import { cookieSecure, defaultResponse } from '../global';
 import { createToken } from '../services/authService';
 
 export async function createUserHandler(
@@ -22,12 +22,12 @@ export async function createUserHandler(
       .cookie('accessToken', accessToken, {
         httpOnly: true,
         sameSite: 'none',
-        // secure: true,
+        secure: cookieSecure,
       })
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
         sameSite: 'none',
-        // secure: true,
+        secure: cookieSecure,
         path: '/auth/refresh',
       })
       .json(user);

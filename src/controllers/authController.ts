@@ -1,6 +1,6 @@
 import { users } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
-import { defaultResponse } from '../global';
+import { cookieSecure, defaultResponse } from '../global';
 import { createToken, verifyToken } from '../services/authService';
 
 export async function signInHandler(
@@ -24,6 +24,7 @@ export async function refreshTokenHandler(req: Request, res: Response) {
     .cookie('accessToken', newAccessToken, {
       httpOnly: true,
       sameSite: 'none',
+      secure: cookieSecure,
     })
     .send('token refreshed');
 }
