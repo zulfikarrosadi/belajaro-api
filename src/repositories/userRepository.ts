@@ -15,6 +15,21 @@ export async function createUser(
     },
     select: { email: true, id: true },
   });
-  console.log(result);
+
   return result;
+}
+
+export async function getUser(
+  email: string,
+): Promise<Pick<users, 'email' | 'password' | 'id'> | null> {
+  const user = await prisma.users.findUnique({
+    where: { email },
+    select: {
+      id: true,
+      email: true,
+      password: true,
+    },
+  });
+
+  return user;
 }
