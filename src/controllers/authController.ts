@@ -66,3 +66,19 @@ export async function refreshTokenHandler(req: Request, res: Response) {
     })
     .sendStatus(200);
 }
+
+export async function signOutHandler(req: Request, res: Response) {
+  return res
+    .cookie('accessToken', '', {
+      maxAge: 0,
+      secure: cookieSecure,
+      sameSite: 'none',
+    })
+    .cookie('refreshToken', '', {
+      maxAge: 0,
+      secure: cookieSecure,
+      sameSite: 'none',
+      path: '/auth/refresh',
+    })
+    .sendStatus(204);
+}
