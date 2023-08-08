@@ -8,9 +8,11 @@ export type defaultResponse = {
   message?: string;
   data?: any;
   error?: {
-    path?: string;
-    value?: string;
-    details?: string;
+    message: string;
+    details?: {
+      path: string;
+      value?: any;
+    }[];
   };
 };
 
