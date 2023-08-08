@@ -1,12 +1,51 @@
 import { users } from '@prisma/client';
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
+import ErrorFactory from '../errors/errorFactory';
 import { cookieSecure, defaultResponse } from '../global';
-import { createToken, verifyToken } from '../services/authService';
+import {
+  createToken,
+  signInService,
+  verifyToken,
+} from '../services/authService';
 
 export async function signInHandler(
-  req: Request<{}, {}, users>,
+  req: Request<{}, {}, Pick<users, 'email' | 'password'>>,
   res: Response<defaultResponse>,
-) {}
+) {
+  const { email, password } = req.body;
+  try {
+    const response = await signInService({ email, password });
+
+    if (!response) {
+      throw ErrorFactory.createBadRequestError(
+        'email or password is incorrect',
+        [
+          { path: 'email', value: email },
+          { path: 'password', value: password },
+        ],
+      );
+    }
+
+    return res
+      .status(200)
+      .cookie('accessToken', response.accessToken, {
+        httpOnly: true,
+        secure: cookieSecure,
+        sameSite: 'none',
+      })
+      .cookie('refreshToken', response.refreshToken, {
+        httpOnly: true,
+        secure: cookieSecure,
+        sameSite: 'none',
+        path: '/auth/refresh',
+      })
+      .json({ status: 'success', data: { email, id: response.userId } });
+  } catch (error) {
+    console.log(error);
+
+    return res.status(400).json({ status: 'fail', error });
+  }
+}
 
 export async function refreshTokenHandler(req: Request, res: Response) {
   const { refreshToken } = req.cookies;
@@ -20,11 +59,10 @@ export async function refreshTokenHandler(req: Request, res: Response) {
   });
 
   return res
-    .status(200)
     .cookie('accessToken', newAccessToken, {
       httpOnly: true,
       sameSite: 'none',
       secure: cookieSecure,
     })
-    .send('token refreshed');
+    .sendStatus(200);
 }
