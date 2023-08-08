@@ -16,9 +16,9 @@ export async function createUserService(user: users): Promise<defaultResponse> {
     console.log(error);
     return {
       status: 'fail',
-      message: 'email already exists',
       error: {
-        path: 'email',
+        message: 'email already exists',
+        details: [{ path: 'email' }],
       },
     };
   }
