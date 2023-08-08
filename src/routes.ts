@@ -2,6 +2,7 @@ import { Express, Request, Response } from 'express';
 import {
   refreshTokenHandler,
   signInHandler,
+  signOutHandler,
 } from './controllers/authController';
 import {
   getPostsHandler,
@@ -38,4 +39,5 @@ export default function routes(app: Express) {
   app.put('/posts/:postID', updatePostHandler);
 
   app.put('/users', updateUserHandler);
+  app.delete('/auth/signout', signOutHandler);
 }
