@@ -7,7 +7,7 @@ export async function verifyUserAuth(
   next: NextFunction,
 ) {
   if (!req.user) {
-    return res.status(401).send('unauthorized');
+    return res.sendStatus(401);
   }
   return next();
 }
