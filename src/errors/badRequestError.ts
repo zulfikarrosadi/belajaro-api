@@ -1,11 +1,9 @@
 export default class BadRequest extends Error {
-  public path: string;
-  public value: string;
+  public details: { path: string; value: string }[];
 
-  constructor(message: string, path?: string, value?: string) {
+  constructor(message: string, details: { path: string; value: string }[]) {
     super();
     this.message = message;
-    this.path = path || '';
-    this.value = value || '';
+    this.details = details;
   }
 }
