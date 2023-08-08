@@ -17,11 +17,15 @@ import {
 import { deserializeUser } from './middlewares/deserializeUser';
 import { validateRequest } from './middlewares/validateRequest';
 import { verifyUserAuth } from './middlewares/verifyUserAuth';
-import userSchemas from './schemas/userSchemas';
+import { createUserSchema, userSignInSchema } from './schemas/userSchemas';
 
 export default function routes(app: Express) {
-  app.post('/auth/signup', validateRequest(userSchemas), createUserHandler);
-  app.post('/auth/signin', validateRequest(userSchemas), signInHandler);
+  app.post(
+    '/auth/signup',
+    validateRequest(createUserSchema),
+    createUserHandler,
+  );
+  app.post('/auth/signin', validateRequest(userSignInSchema), signInHandler);
   app.post('/auth/refresh', refreshTokenHandler);
 
   app.use(deserializeUser);
