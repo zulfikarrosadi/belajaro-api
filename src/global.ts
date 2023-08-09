@@ -5,6 +5,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 
 export type defaultResponse = {
   status: 'success' | 'fail';
+  code?: number;
   message?: string;
   data?: any;
   error?: {
