@@ -32,11 +32,11 @@ export default function routes(app: Express) {
   app.use(deserializeUser);
   app.use(verifyUserAuth);
 
-  app.post('/posts', createThreadHandler);
-  app.get('/posts', getThreadsHandler);
-  app.get('/posts/:postID', getThreadByIdHandler);
-  app.delete('/posts/:postID', deleteThreadHandler);
-  app.put('/posts/:postID', updateThreadHandler);
+  app.post('/threads', createThreadHandler);
+  app.get('/threads', getThreadsHandler);
+  app.get('/threads/:threadId', getThreadByIdHandler);
+  app.delete('/threads/:threadId', deleteThreadHandler);
+  app.put('/threads/:threadId', updateThreadHandler);
 
   app.put('/users', updateUserHandler);
   app.delete('/auth/signout', signOutHandler);
