@@ -1,109 +1,54 @@
 import { Request, Response } from 'express';
-import BadRequest from '../errors/badRequestError';
-import NotFound from '../errors/notFoundError';
-import {
-  getThreads,
-  getThreadById,
-  createThread,
-  updateThread,
-  deleteThread,
-} from '../repositories/threadRepository';
 import { defaultResponse } from '../global';
-
-type postIDParam = { postID: string };
-type createOrUpdatePost = { post: post; meta: meta };
+import {
+  createThreadService,
+  deleteThreadService,
+  getThreadByIdService,
+  getThreadsService,
+  updateThreadService,
+} from '../services/threadService';
+import { Thread } from '@prisma/client';
 
 export async function getThreadsHandler(
   req: Request,
   res: Response<defaultResponse>,
 ) {
-  let response: defaultResponse;
-  try {
-    const posts = await getThreads();
-    response = { status: 'success', data: posts };
-
-    return res.status(200).json(response);
-  } catch (error: any) {
-    response = { status: 'fail', error: { details: error.message } };
-    return res.status(400).json(response);
-  }
+  const threads = await getThreadsService();
+  return res.status(200).json(threads);
 }
 
 export async function getThreadByIdHandler(
-  req: Request<postIDParam>,
+  req: Request<{ threadId: string }>,
   res: Response<defaultResponse>,
 ) {
-  const { postID } = req.params;
-  const id = parseInt(postID, 10);
-  try {
-    const post = await getThreadById({ id });
-    if (post instanceof NotFound) {
-      throw Error(post.message);
-    }
-    const result: defaultResponse = { status: 'success', data: post };
-    return res.status(200).json(result);
-  } catch (error: any) {
-    const result: defaultResponse = {
-      status: 'fail',
-      error: { details: error.message },
-    };
-    return res.status(404).json(result);
-  }
+  const { threadId } = req.params;
+  const id = parseInt(threadId, 10);
+  const thread = await getThreadByIdService(id);
+  return res.status(thread.code!).json(thread);
 }
 
 export async function createThreadHandler(
-  req: Request<{}, {}, createOrUpdatePost>,
+  req: Request<{}, {}, Thread>,
   res: Response<defaultResponse>,
 ) {
-  let response: defaultResponse;
-  try {
-    const { id: postID } = await createThread(req.body.post, req.body.meta);
-    response = { status: 'success', data: { postID } };
-
-    return res.status(201).json(response);
-  } catch (error: any) {
-    console.log(error);
-
-    response = { status: 'fail', error: { details: error.message } };
-    return res.status(400).json(response);
-  }
+  const result = await createThreadService(req.body);
+  return res.status(result.code!).json(result);
 }
 
 export async function updateThreadHandler(
-  req: Request<postIDParam, {}, createOrUpdatePost>,
+  req: Request<{}, {}, Thread>,
   res: Response<defaultResponse>,
 ) {
-  const { postID } = req.params;
-  const id = parseInt(postID, 10);
-  let response: defaultResponse;
-  try {
-    const updatedPost = await updateThread(req.body.post, req.body.meta);
-    if (updatedPost instanceof BadRequest) {
-      throw new Error(updatedPost.message);
-    }
-    response = { status: 'success', data: { postID: updatedPost.id } };
-    return res.status(200).json(response);
-  } catch (error: any) {
-    response = { status: 'fail', error: { details: error.message } };
-  }
+  const updatedThread = await updateThreadService(req.body);
+  return res.status(updatedThread.code!).json(updatedThread);
 }
 
 export async function deleteThreadHandler(
-  req: Request<postIDParam>,
+  req: Request<{ threadId: string }>,
   res: Response<defaultResponse>,
 ) {
-  const { postID } = req.params;
-  const id = parseInt(postID, 10);
-
-  try {
-    const deletedPost = await deleteThread(id);
-    if (deletedPost instanceof NotFound) {
-      throw new Error(deletedPost.message);
-    }
-    return res.status(204);
-  } catch (error: any) {
-    return res
-      .status(404)
-      .json({ status: 'fail', error: { details: error.message } });
-  }
+  const { threadId } = req.params;
+  const id = parseInt(threadId, 10);
+  const deletedThread = await deleteThreadService(id);
+  return res.sendStatus(204);
 }
