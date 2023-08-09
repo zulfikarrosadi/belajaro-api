@@ -1,13 +1,12 @@
-import { meta, post } from '@prisma/client';
 import { Request, Response } from 'express';
 import BadRequest from '../errors/badRequestError';
 import NotFound from '../errors/notFoundError';
 import {
-  getPosts,
-  getPostByID,
-  createPost,
-  updatePost,
-  deletePost,
+  getThreads,
+  getThreadById,
+  createThread,
+  updateThread,
+  deleteThread,
 } from '../repositories/threadRepository';
 import { defaultResponse } from '../global';
 
@@ -20,7 +19,7 @@ export async function getPostsHandler(
 ) {
   let response: defaultResponse;
   try {
-    const posts = await getPosts();
+    const posts = await getThreads();
     response = { status: 'success', data: posts };
 
     return res.status(200).json(response);
@@ -37,7 +36,7 @@ export async function getPostByIDHandler(
   const { postID } = req.params;
   const id = parseInt(postID, 10);
   try {
-    const post = await getPostByID({ id });
+    const post = await getThreadById({ id });
     if (post instanceof NotFound) {
       throw Error(post.message);
     }
@@ -58,7 +57,7 @@ export async function createPostHandler(
 ) {
   let response: defaultResponse;
   try {
-    const { id: postID } = await createPost(req.body.post, req.body.meta);
+    const { id: postID } = await createThread(req.body.post, req.body.meta);
     response = { status: 'success', data: { postID } };
 
     return res.status(201).json(response);
@@ -78,7 +77,7 @@ export async function updatePostHandler(
   const id = parseInt(postID, 10);
   let response: defaultResponse;
   try {
-    const updatedPost = await updatePost(req.body.post, req.body.meta);
+    const updatedPost = await updateThread(req.body.post, req.body.meta);
     if (updatedPost instanceof BadRequest) {
       throw new Error(updatedPost.message);
     }
@@ -97,7 +96,7 @@ export async function deletePostHandler(
   const id = parseInt(postID, 10);
 
   try {
-    const deletedPost = await deletePost(id);
+    const deletedPost = await deleteThread(id);
     if (deletedPost instanceof NotFound) {
       throw new Error(deletedPost.message);
     }

@@ -1,86 +1,63 @@
-import { PrismaClient, post, meta } from '@prisma/client';
+import { PrismaClient, Thread } from '@prisma/client';
 import BadRequest from '../errors/badRequestError';
 import NotFound from '../errors/notFoundError';
 
 const prisma = new PrismaClient();
 
-export async function getPosts() {
-  try {
-    const posts = await prisma.post.findMany();
-    return posts;
-  } catch (error) {
-    return error;
-  }
+export async function getThreads() {
+  const posts = await prisma.thread.findMany();
+  return posts;
 }
 
-export async function getPostByID({ id }: { id: number }) {
+export async function getThreadById({ id }: { id: number }) {
   try {
-    const post = await prisma.post.findFirst({
+    const thread = await prisma.thread.findFirst({
       where: { id },
     });
-    if (!post) {
+    if (!thread) {
       throw new NotFound('post not found');
     }
-    return post;
+    return thread;
   } catch (error) {
     return error;
   }
 }
 
-export async function createPost(
-  post: post,
-  meta: meta,
-): Promise<Pick<post, 'id'>> {
-  const postID = await prisma.post.create({
+export async function createThread(
+  thread: Thread,
+): Promise<Pick<Thread, 'id'>> {
+  const result = await prisma.thread.create({
     data: {
-      title: post.title,
-      content: post.content,
-      published: post.published,
+      title: thread.title,
+      content: thread.content,
+      published: thread.published,
       user: {
-        connect: {
-          id: post.author_id,
-        },
+        connect: { id: thread.author_id },
+      },
+      forum: {
+        connect: { id: thread.forum_id },
       },
       updated_at: new Date().toISOString(),
-      meta_metaTopost: {
-        create: {
-          postBanner: meta.postBanner,
-          description: meta.description,
-          tag: meta.tag,
-          categoryId: meta.categoryId,
-        },
-      },
     },
-    select: {
-      id: true,
-    },
+    select: { id: true },
   });
 
-  return { id: postID.id };
+  return { id: result.id };
 }
 
-export async function updatePost(
-  post: post,
-  meta: meta,
-): Promise<Pick<post, 'id'> | BadRequest> {
+export async function updateThread(
+  thread: Thread,
+): Promise<Pick<Thread, 'id'> | BadRequest> {
   try {
-    const postID = await prisma.post.update({
+    const postID = await prisma.thread.update({
       where: {
-        id: post.id,
+        id: thread.id,
       },
       data: {
-        title: post.title,
-        content: post.content,
+        title: thread.title,
+        content: thread.content,
         updated_at: new Date().toISOString(),
-        published: post.published,
-        meta_metaTopost: {
-          update: {
-            tag: meta.tag,
-            description: meta.description,
-            postBanner: meta.postBanner,
-            categoryId: meta.categoryId,
-          },
-        },
+        published: thread.published,
       },
     });
     if (!postID) {
@@ -93,16 +70,16 @@ export async function updatePost(
   }
 }
 
-export async function deletePost(postID: number) {
+export async function deleteThread(threadId: number) {
   try {
-    const deletedPost = await prisma.post.delete({
-      where: { id: postID },
+    const deletedThread = await prisma.thread.delete({
+      where: { id: threadId },
       select: { id: true },
     });
-    if (!deletedPost) {
+    if (!deletedThread) {
       throw new NotFound('post not found');
     }
-    return deletedPost.id;
+    return deletedThread.id;
   } catch (error) {
     return error;
   }
