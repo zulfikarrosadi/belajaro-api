@@ -8,7 +8,7 @@ import {
   createPost,
   updatePost,
   deletePost,
-} from '../repositories/postRepository';
+} from '../repositories/threadRepository';
 import { defaultResponse } from '../global';
 
 type postIDParam = { postID: string };
