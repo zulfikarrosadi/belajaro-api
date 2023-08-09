@@ -13,9 +13,6 @@ export async function getThreadById({ id }: { id: number }) {
   const thread = await prisma.thread.findFirst({
     where: { id },
   });
-  if (!thread) {
-    throw new NotFound('post not found');
-  }
   return thread;
 }
 
@@ -63,8 +60,5 @@ export async function deleteThread(threadId: number) {
     where: { id: threadId },
     select: { id: true },
   });
-  if (!deletedThread) {
-    throw new NotFound('post not found');
-  }
   return deletedThread.id;
 }
