@@ -5,12 +5,12 @@ import {
   signOutHandler,
 } from './controllers/authController';
 import {
-  getPostsHandler,
-  getPostByIDHandler,
-  deletePostHandler,
-  updatePostHandler,
-  createPostHandler,
-} from './controllers/postController';
+  getThreadsHandler,
+  getThreadByIdHandler,
+  deleteThreadHandler,
+  updateThreadHandler,
+  createThreadHandler,
+} from './controllers/threadController';
 import {
   createUserHandler,
   updateUserHandler,
@@ -32,11 +32,11 @@ export default function routes(app: Express) {
   app.use(deserializeUser);
   app.use(verifyUserAuth);
 
-  app.post('/posts', createPostHandler);
-  app.get('/posts', getPostsHandler);
-  app.get('/posts/:postID', getPostByIDHandler);
-  app.delete('/posts/:postID', deletePostHandler);
-  app.put('/posts/:postID', updatePostHandler);
+  app.post('/posts', createThreadHandler);
+  app.get('/posts', getThreadsHandler);
+  app.get('/posts/:postID', getThreadByIdHandler);
+  app.delete('/posts/:postID', deleteThreadHandler);
+  app.put('/posts/:postID', updateThreadHandler);
 
   app.put('/users', updateUserHandler);
   app.delete('/auth/signout', signOutHandler);

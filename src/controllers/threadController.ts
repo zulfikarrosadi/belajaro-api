@@ -13,7 +13,7 @@ import { defaultResponse } from '../global';
 type postIDParam = { postID: string };
 type createOrUpdatePost = { post: post; meta: meta };
 
-export async function getPostsHandler(
+export async function getThreadsHandler(
   req: Request,
   res: Response<defaultResponse>,
 ) {
@@ -29,7 +29,7 @@ export async function getPostsHandler(
   }
 }
 
-export async function getPostByIDHandler(
+export async function getThreadByIdHandler(
   req: Request<postIDParam>,
   res: Response<defaultResponse>,
 ) {
@@ -51,7 +51,7 @@ export async function getPostByIDHandler(
   }
 }
 
-export async function createPostHandler(
+export async function createThreadHandler(
   req: Request<{}, {}, createOrUpdatePost>,
   res: Response<defaultResponse>,
 ) {
@@ -69,7 +69,7 @@ export async function createPostHandler(
   }
 }
 
-export async function updatePostHandler(
+export async function updateThreadHandler(
   req: Request<postIDParam, {}, createOrUpdatePost>,
   res: Response<defaultResponse>,
 ) {
@@ -88,7 +88,7 @@ export async function updatePostHandler(
   }
 }
 
-export async function deletePostHandler(
+export async function deleteThreadHandler(
   req: Request<postIDParam>,
   res: Response<defaultResponse>,
 ) {
