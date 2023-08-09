@@ -34,7 +34,8 @@ model Thread {
   created_at DateTime  @default(now()) @db.Timestamp(6)
   updated_at DateTime
   author_id  Int
-  meta       Int       @unique
+  forum_id   Int
+  forum      Forum     @relation(fields: [forum_id], references: [id], onDelete: Cascade)
   user       User      @relation(fields: [author_id], references: [id], onDelete: NoAction)
   comment    Comment[]
 
@@ -51,4 +52,13 @@ model User {
   post      Thread[]
 
   @@map("users")
+}
+
+model Forum {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(250)
+  description     String   @db.VarChar(500)
+  banner          String?  @db.VarChar(250)
+  profile_picture String?  @db.VarChar(250)
+  Thread          Thread[]
 }
