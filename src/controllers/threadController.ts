@@ -31,7 +31,8 @@ export async function createThreadHandler(
   req: Request<{}, {}, Thread>,
   res: Response<defaultResponse>,
 ) {
-  const result = await createThreadService(req.body);
+  const userId = res.locals.user.id;
+  const result = await createThreadService(req.body, userId);
   return res.status(result.code!).json(result);
 }
 
@@ -39,7 +40,8 @@ export async function updateThreadHandler(
   req: Request<{}, {}, Thread>,
   res: Response<defaultResponse>,
 ) {
-  const updatedThread = await updateThreadService(req.body);
+  const userId = res.locals.user.id;
+  const updatedThread = await updateThreadService(req.body, userId);
   return res.status(updatedThread.code!).json(updatedThread);
 }
 
@@ -48,7 +50,8 @@ export async function deleteThreadHandler(
   res: Response<defaultResponse>,
 ) {
   const { threadId } = req.params;
+  const userId = res.locals.user.id;
   const id = parseInt(threadId, 10);
-  const deletedThread = await deleteThreadService(id);
-  return res.sendStatus(204);
+  const deletedThread = await deleteThreadService(id, userId);
+  return res.sendStatus(deletedThread);
 }
