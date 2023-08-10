@@ -1,17 +1,16 @@
-import { PrismaClient, users } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export async function createUser(
-  user: users,
-): Promise<Pick<users, 'email' | 'id'>> {
-  const result = await prisma.users.create({
+  user: User,
+): Promise<Pick<User, 'email' | 'id'>> {
+  const result = await prisma.user.create({
     data: {
       email: user.email,
       password: user.password,
       firstname: user.firstname,
       lastname: user.lastname,
-      school: user.school,
     },
     select: { email: true, id: true },
   });
@@ -21,8 +20,8 @@ export async function createUser(
 
 export async function getUser(
   email: string,
-): Promise<Pick<users, 'email' | 'password' | 'id'> | null> {
-  const user = await prisma.users.findUnique({
+): Promise<Pick<User, 'email' | 'password' | 'id'> | null> {
+  const user = await prisma.user.findUnique({
     where: { email },
     select: {
       id: true,
