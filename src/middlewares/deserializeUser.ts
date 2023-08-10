@@ -14,12 +14,12 @@ export async function deserializeUser(
   const cookie = req.cookies;
 
   const { payload: accessTokenPayload } = verifyToken(cookie.accessToken);
-  console.log('access token payload', accessTokenPayload);
 
   if (accessTokenPayload === null) {
     return next();
   }
   req.user = accessTokenPayload;
+  res.locals.user = accessTokenPayload;
 
   return next();
 }
