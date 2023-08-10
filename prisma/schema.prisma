@@ -61,4 +61,6 @@ model Forum {
   banner          String?  @db.VarChar(250)
   profile_picture String?  @db.VarChar(250)
   Thread          Thread[]
+
+  @@map("forums")
 }
