@@ -19,7 +19,6 @@ export async function deserializeUser(
     return next();
   }
   req.user = accessTokenPayload;
-  res.locals.user = accessTokenPayload;
 
   return next();
 }
