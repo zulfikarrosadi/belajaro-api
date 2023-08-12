@@ -5,6 +5,12 @@ import {
   signOutHandler,
 } from './controllers/authController';
 import {
+  createForumHandler,
+  deleteForumHandler,
+  getForumByNameHandler,
+  updateForumHandler,
+} from './controllers/forumController';
+import {
   getThreadsHandler,
   getThreadByIdHandler,
   deleteThreadHandler,
@@ -18,6 +24,7 @@ import {
 import { deserializeUser } from './middlewares/deserializeUser';
 import { validateRequest } from './middlewares/validateRequest';
 import { verifyUserAuth } from './middlewares/verifyUserAuth';
+import { createForumSchema } from './schemas/forumSchemas';
 import { createUserSchema, userSignInSchema } from './schemas/userSchemas';
 
 export default function routes(app: Express) {
@@ -40,4 +47,13 @@ export default function routes(app: Express) {
 
   app.put('/users', updateUserHandler);
   app.delete('/auth/signout', signOutHandler);
+
+  app.post('/forums', validateRequest(createForumSchema), createForumHandler);
+  app.get('/forums/:forumName', getForumByNameHandler);
+  app.put(
+    '/forums/:forumId',
+    validateRequest(createForumSchema),
+    updateForumHandler,
+  );
+  app.delete('/forums/:forumId', deleteForumHandler);
 }
