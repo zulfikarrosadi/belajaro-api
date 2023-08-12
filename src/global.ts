@@ -21,3 +21,9 @@ export const privateKey = 'my private key';
 export const publicKey = 'my public key';
 export const cookieSecure =
   process.env.STATUS === 'PRODUCTION' || process.env.STATUS === 'TESTING';
+export const FIELD_NAME = {
+  USER_PROFILE_PICTURE: 'userProfilePicture',
+  FORUM_PROFILE_PICTURE: 'forumProfilePicture',
+  FORUM_BANNER: 'forumBanner',
+  THREADS: 'threads',
+};
