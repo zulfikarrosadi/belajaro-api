@@ -3,3 +3,6 @@ node_modules
 .env
 .http
 note.*
+assets/userProfilePicture/*.jpg
+assets/userProfilePicture/*.png
+assets/userProfilePicture/*.jpeg
