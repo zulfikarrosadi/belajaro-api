@@ -22,10 +22,15 @@ import {
   updateUserHandler,
 } from './controllers/userController';
 import { deserializeUser } from './middlewares/deserializeUser';
+import uploadPhoto from './middlewares/uploadPhoto';
 import { validateRequest } from './middlewares/validateRequest';
 import { verifyUserAuth } from './middlewares/verifyUserAuth';
 import { createForumSchema } from './schemas/forumSchemas';
-import { createUserSchema, userSignInSchema } from './schemas/userSchemas';
+import {
+  createUserSchema,
+  updateUserSchema,
+  userSignInSchema,
+} from './schemas/userSchemas';
 
 export default function routes(app: Express) {
   app.post(
@@ -45,7 +50,12 @@ export default function routes(app: Express) {
   app.delete('/threads/:threadId', deleteThreadHandler);
   app.put('/threads/:threadId', updateThreadHandler);
 
-  app.put('/users', updateUserHandler);
+  app.put(
+    '/users',
+    uploadPhoto,
+    validateRequest(updateUserSchema),
+    updateUserHandler,
+  );
   app.delete('/auth/signout', signOutHandler);
 
   app.post('/forums', validateRequest(createForumSchema), createForumHandler);
