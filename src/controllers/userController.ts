@@ -1,11 +1,11 @@
-import { users } from '@prisma/client';
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { createUserService } from '../services/userService';
+import { createUserService, updateUserService } from '../services/userService';
 import { cookieSecure, defaultResponse } from '../global';
 import { createToken } from '../services/authService';
 
 export async function createUserHandler(
-  req: Request<{}, {}, users>,
+  req: Request<{}, {}, User>,
   res: Response<defaultResponse>,
 ) {
   try {
@@ -37,6 +37,16 @@ export async function createUserHandler(
 }
 
 export async function updateUserHandler(
-  req: Request<{}, {}, users>,
+  req: Request<{}, {}, User>,
   res: Response<defaultResponse>,
-) {}
+) {
+  const response = await updateUserService({
+    id: req.user.id,
+    email: req.body.email,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    password: req.body.password,
+    profilePicture: req.file?.filename ?? '',
+  });
+  return res.status(response.code!).json(response);
+}
