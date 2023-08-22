@@ -1,4 +1,6 @@
-import { Express, Request, Response } from 'express';
+import { Express } from 'express';
+import swaggerUIExpress from 'swagger-ui-express';
+
 import {
   refreshTokenHandler,
   signInHandler,
@@ -25,14 +27,21 @@ import { deserializeUser } from './middlewares/deserializeUser';
 import uploadPhoto from './middlewares/uploadPhoto';
 import { validateRequest } from './middlewares/validateRequest';
 import { verifyUserAuth } from './middlewares/verifyUserAuth';
-import { createForumSchema } from './schemas/forumSchemas';
+import { createForumSchema, updateForumSchema } from './schemas/forumSchemas';
 import {
   createUserSchema,
   updateUserSchema,
   userSignInSchema,
 } from './schemas/userSchemas';
+import swaggerDocs from '../swagger.json';
 
 export default function routes(app: Express) {
+  app.get('/api/healthcheck', (req, res) => res.sendStatus(200));
+  app.use(
+    '/api/docs',
+    swaggerUIExpress.serve,
+    swaggerUIExpress.setup(swaggerDocs),
+  );
   app.post(
     '/auth/signup',
     validateRequest(createUserSchema),
