@@ -1,0 +1,533 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "description": "API documentation for Belajaro Project",
+    "version": "1.0.0",
+    "title": "Belajaro API Documentation",
+    "contact": {
+      "name": "API Support",
+      "email": "zulfikarrosadi@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Managing user authentication"
+    },
+    {
+      "name": "forum",
+      "description": "Access to all forum features"
+    },
+    {
+      "name": "thread",
+      "description": "Access to all thread features"
+    }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/api/v1/auth/signup": {
+      "post": {
+        "tags": ["user"],
+        "summary": "create user and gain access to protected resources",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "operationId": "signUp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password",
+                  "passwordConfirmation",
+                  "firstName"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "test@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "password123"
+                  },
+                  "passwordConfirmation": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "password123"
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "example": "Jhon"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "Doe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessUserAuth"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "fail to create user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "fail"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 400
+                    },
+                    "error": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "fail to create user"
+                        },
+                        "details": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "path": {
+                                "types": "string"
+                              },
+                              "value": {
+                                "types": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/signin": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User sign and gain access to protected resources",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "test@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful to sign in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessUserAuth"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "sign in process fail, user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailUserAuth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "summary": "Issue new access token",
+        "tags": ["auth"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": {
+          "in": "header",
+          "name": "accessToken",
+          "schema": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "/api/v1/threads": {
+      "post": {
+        "summary": "create new thread",
+        "tags": ["thread"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "content": { "type": "string" },
+                  "images": { "type": "string", "format": "binary" }
+                }
+              },
+              "encoding": {
+                "images": {
+                  "contentType": ["image/png", "image/jpeg"]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successfully creating thread",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "threadId": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "fail to create thread, usually because validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forums/{forumId}/threads/{threadId}": {
+      "put": {
+        "summary": "update thread",
+        "tags": ["thread"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "forumId",
+            "description": "ID of forum that thread belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "in": "path",
+            "name": "threadId",
+            "description": "ID of threads that need to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "content": { "type": "string" },
+                  "images": { "type": "string", "format": "binary" }
+                }
+              },
+              "encoding": {
+                "images": {
+                  "contentType": ["image/png", "image/jpeg"]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200,
+                      "format": "int32"
+                    },
+                    "data": {
+                      "threadId": {
+                        "type": "integer",
+                        "example": 1,
+                        "format": "int32"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "delete thread",
+        "tags": ["thread"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "forumId",
+            "description": "ID of forum that thread belongs to",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "in": "path",
+            "name": "threadId",
+            "description": "ID of threads that need to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "security": [{ "cookieAuth": [] }],
+        "responses": {
+          "204": {
+            "description": "no content"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "accessToken"
+      }
+    },
+    "schemas": {
+      "UserSignUp": {
+        "required": ["email", "password", "passwordConfirmation", "firstName"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "test@email.com"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "password123"
+          },
+          "passwordConfirmation": {
+            "type": "string",
+            "format": "password",
+            "example": "password123"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Jhon"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Doe"
+          }
+        }
+      },
+      "SuccessUserAuth": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "integer",
+                "format": "int32",
+                "example": 1
+              },
+              "email": {
+                "type": "string",
+                "example": "test@email.com"
+              }
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "fail"
+          },
+          "code": {
+            "type": "integer",
+            "example": 400
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "validation error"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "types": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "FailUserAuth": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "fail"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "example": 404
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "user or password is incorrect"
+              },
+              "details": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "types": "string",
+                      "example": "email"
+                    },
+                    "value": {
+                      "types": "string",
+                      "example": "test@email.com"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
