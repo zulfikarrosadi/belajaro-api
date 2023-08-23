@@ -24,7 +24,7 @@ import {
   updateUserHandler,
 } from './controllers/userController';
 import { deserializeUser } from './middlewares/deserializeUser';
-import uploadPhoto from './middlewares/uploadPhoto';
+import { formDataParser } from './middlewares/formDataParser';
 import { validateRequest } from './middlewares/validateRequest';
 import { verifyUserAuth } from './middlewares/verifyUserAuth';
 import { createForumSchema, updateForumSchema } from './schemas/forumSchemas';
@@ -34,6 +34,8 @@ import {
   userSignInSchema,
 } from './schemas/userSchemas';
 import swaggerDocs from '../swagger.json';
+import uploadPhoto from './helpers/uploadPhoto';
+import { FIELD_NAME } from './global';
 
 export default function routes(app: Express) {
   app.get('/api/healthcheck', (req, res) => res.sendStatus(200));
@@ -61,17 +63,33 @@ export default function routes(app: Express) {
 
   app.put(
     '/users',
-    uploadPhoto,
+    formDataParser(uploadPhoto.single(FIELD_NAME.USER_PROFILE_PICTURE)),
     validateRequest(updateUserSchema),
     updateUserHandler,
   );
   app.delete('/auth/signout', signOutHandler);
 
-  app.post('/forums', validateRequest(createForumSchema), createForumHandler);
+  app.post(
+    '/api/v1/forums',
+    formDataParser(
+      uploadPhoto.fields([
+        { name: FIELD_NAME.FORUM_PROFILE_PICTURE, maxCount: 1 },
+        { name: FIELD_NAME.FORUM_BANNER, maxCount: 1 },
+      ]),
+    ),
+    validateRequest(createForumSchema),
+    createForumHandler,
+  );
   app.get('/forums/:forumName', getForumByNameHandler);
   app.put(
     '/forums/:forumId',
-    validateRequest(createForumSchema),
+    formDataParser(
+      uploadPhoto.fields([
+        { name: FIELD_NAME.FORUM_PROFILE_PICTURE, maxCount: 1 },
+        { name: FIELD_NAME.FORUM_BANNER, maxCount: 1 },
+      ]),
+    ),
+    validateRequest(updateForumSchema),
     updateForumHandler,
   );
   app.delete('/forums/:forumId', deleteForumHandler);
