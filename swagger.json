@@ -384,6 +384,310 @@
           }
         }
       }
+    },
+    "/api/v1/forums/:forumName": {
+      "get": {
+        "summary": "Get all posible forum by searching it by forum name",
+        "tags": ["forum"],
+        "parameters": [
+          {
+            "in": "path",
+            "description": "forum name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "programming"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "forumId": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": 1
+                          },
+                          "forumName": {
+                            "type": "string",
+                            "example": "programming hub"
+                          },
+                          "tags": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "programming"
+                            }
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "language": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "English"
+                            }
+                          },
+                          "profilePicture": {
+                            "type": "string",
+                            "example": "129381.png"
+                          },
+                          "summary": {
+                            "type": "string",
+                            "example": "programming hub to share and connect"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forums": {
+      "post": {
+        "summary": "create new forum",
+        "tags": ["forum"],
+        "security": [{ "cookieAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["forumName", "summary", "tags"],
+                "properties": {
+                  "forumName": {
+                    "type": "string",
+                    "example": "Programming Hub"
+                  },
+                  "summary": {
+                    "type": "string",
+                    "example": "programming hub to share and connect"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "programming hub to share knowledge, experience and connect with others"
+                  },
+                  "profilePicture": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "banner": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": "1",
+                      "description": "tag id"
+                    }
+                  },
+                  "language": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "profilePicture": {
+                  "contentType": ["image/png", "image/jpeg"]
+                },
+                "banner": {
+                  "contentType": ["image/jpeg", "image/png"]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successfully creating forum",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "forumId": {
+                          "type": "integer",
+                          "format": "int32",
+                          "example": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "fail to create thread, usually because validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forums/:forumId": {
+      "put": {
+        "summary": "Update forum",
+        "tags": ["forum"],
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "name": "forumId",
+            "in": "path",
+            "description": "id of forum that needs to be updated",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["forumName", "summary", "tags"],
+                "properties": {
+                  "forumName": {
+                    "type": "string",
+                    "example": "Programming Hub"
+                  },
+                  "summary": {
+                    "type": "string",
+                    "example": "programming hub to share and connect"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "programming hub to share knowledge, experience and connect with others"
+                  },
+                  "profilePicture": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "banner": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "format": "int32",
+                      "example": "1",
+                      "description": "tag id"
+                    }
+                  },
+                  "language": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "profilePicture": {
+                  "contentType": ["image/png", "image/jpeg"]
+                },
+                "banner": {
+                  "contentType": ["image/jpeg", "image/png"]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successfully updating forum",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "forumId": {
+                          "type": "integer",
+                          "format": "int32",
+                          "example": 1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "fail to update thread, usually because validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
