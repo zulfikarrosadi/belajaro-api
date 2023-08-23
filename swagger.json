@@ -476,46 +476,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "required": ["forumName", "summary", "tags"],
-                "properties": {
-                  "forumName": {
-                    "type": "string",
-                    "example": "Programming Hub"
-                  },
-                  "summary": {
-                    "type": "string",
-                    "example": "programming hub to share and connect"
-                  },
-                  "description": {
-                    "type": "string",
-                    "example": "programming hub to share knowledge, experience and connect with others"
-                  },
-                  "profilePicture": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "banner": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "tags": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "format": "int32",
-                      "example": "1",
-                      "description": "tag id"
-                    }
-                  },
-                  "language": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "example": 1
-                    }
-                  }
-                }
+                "$ref": "#/components/schemas/Forums"
               },
               "encoding": {
                 "profilePicture": {
@@ -593,46 +554,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "type": "object",
-                "required": ["forumName", "summary", "tags"],
-                "properties": {
-                  "forumName": {
-                    "type": "string",
-                    "example": "Programming Hub"
-                  },
-                  "summary": {
-                    "type": "string",
-                    "example": "programming hub to share and connect"
-                  },
-                  "description": {
-                    "type": "string",
-                    "example": "programming hub to share knowledge, experience and connect with others"
-                  },
-                  "profilePicture": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "banner": {
-                    "type": "string",
-                    "format": "binary"
-                  },
-                  "tags": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "format": "int32",
-                      "example": "1",
-                      "description": "tag id"
-                    }
-                  },
-                  "language": {
-                    "type": "array",
-                    "items": {
-                      "type": "integer",
-                      "example": 1
-                    }
-                  }
-                }
+                "$ref": "#/components/schemas/Forums"
               },
               "encoding": {
                 "profilePicture": {
@@ -699,6 +621,48 @@
       }
     },
     "schemas": {
+      "Forums": {
+        "type": "object",
+        "required": ["forumName", "summary", "tags"],
+        "properties": {
+          "forumName": {
+            "type": "string",
+            "example": "Programming Hub"
+          },
+          "summary": {
+            "type": "string",
+            "example": "programming hub to share and connect"
+          },
+          "description": {
+            "type": "string",
+            "example": "programming hub to share knowledge, experience and connect with others"
+          },
+          "profilePicture": {
+            "type": "string",
+            "format": "binary"
+          },
+          "banner": {
+            "type": "string",
+            "format": "binary"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32",
+              "example": "1",
+              "description": "tag id"
+            }
+          },
+          "language": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        }
+      },
       "UserSignUp": {
         "required": ["email", "password", "passwordConfirmation", "firstName"],
         "type": "object",
