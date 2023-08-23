@@ -441,13 +441,6 @@
                             "type": "string",
                             "format": "date"
                           },
-                          "language": {
-                            "type": "array",
-                            "items": {
-                              "type": "string",
-                              "example": "English"
-                            }
-                          },
                           "profilePicture": {
                             "type": "string",
                             "example": "129381.png"
@@ -652,13 +645,6 @@
               "format": "int32",
               "example": "1",
               "description": "tag id"
-            }
-          },
-          "language": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "example": 1
             }
           }
         }
