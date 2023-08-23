@@ -35,9 +35,9 @@ model Thread {
   updated_at DateTime
   author_id  Int
   forum_id   Int
-  forum      Forum     @relation(fields: [forum_id], references: [id], onDelete: Cascade)
-  user       User      @relation(fields: [author_id], references: [id], onDelete: NoAction)
   comment    Comment[]
+  user       User      @relation(fields: [author_id], references: [id], onDelete: NoAction)
+  forum      Forum     @relation(fields: [forum_id], references: [id], onDelete: Cascade)
 
   @@map("threads")
 }
@@ -56,12 +56,32 @@ model User {
 }
 
 model Forum {
-  id             Int      @id @default(autoincrement())
-  title          String   @db.VarChar(250)
-  description    String   @db.VarChar(500)
-  banner         String?  @db.VarChar(250)
-  profilePicture String?  @map("profile_picture") @db.VarChar(250)
+  id             Int         @id @default(autoincrement())
+  name           String      @db.VarChar(250)
+  summary        String      @db.VarChar(250)
+  description    String?     @db.VarChar(700)
+  banner         String?     @db.VarChar(250)
+  profilePicture String?     @map("profile_picture") @db.VarChar(250)
+  forum_tags     ForumTags[]
   Thread         Thread[]
 
   @@map("forums")
+}
+
+model Tag {
+  id         Int         @id
+  name       String      @db.VarChar(50)
+  forum_tags ForumTags[]
+
+  @@map("tags")
+}
+
+model ForumTags {
+  forum_id Int
+  tag_id   Int
+  forums   Forum @relation(fields: [forum_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tags     Tag   @relation(fields: [tag_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([forum_id, tag_id])
+  @@map("forum_tags")
 }
