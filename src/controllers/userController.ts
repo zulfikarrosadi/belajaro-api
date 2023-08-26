@@ -44,7 +44,7 @@ export async function updateUserHandler(
   res: Response<defaultResponse>,
 ) {
   const response = await updateUserService({
-    id: req.user.id,
+    id: parseInt(req.user.id, 10),
     email: req.body.email,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
