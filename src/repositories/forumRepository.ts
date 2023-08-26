@@ -65,3 +65,23 @@ export async function getForumByName(
   });
   return forums;
 }
+
+export async function joinForum(userId: number, forumId: number) {
+  const result = await prisma.userForum.create({
+    data: {
+      user: {
+        connect: { id: userId },
+      },
+      forums: {
+        connect: { id: forumId },
+      },
+      joinedAt: new Date().toISOString(),
+    },
+    select: {
+      user_id: true,
+      forum_id: true,
+      joinedAt: true,
+    },
+  });
+  return result;
+}
