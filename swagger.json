@@ -201,11 +201,23 @@
         }
       }
     },
-    "/api/v1/threads": {
+    "/api/v1/forums/{forumId}/threads": {
       "post": {
         "summary": "create new thread",
         "tags": ["thread"],
         "security": [{ "cookieAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "forumId",
+            "description": "to determine where this thread is belong",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -245,7 +257,47 @@
                       "type": "object",
                       "properties": {
                         "threadId": {
-                          "type": "integer"
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "The best way to write code"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "this is the best way to write code IMO"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "forum": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Programming Hub"
+                            }
+                          }
+                        },
+                        "user": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "profilePicture": {
+                            "type": "string",
+                            "example": "129381.png"
+                          },
+                          "firstName": {
+                            "type": "string",
+                            "example": "Jhon"
+                          }
                         }
                       }
                     }
