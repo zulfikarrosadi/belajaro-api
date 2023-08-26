@@ -49,3 +49,11 @@ export async function updateForumHandler(
   const response = await updateForumService(forumdata);
   return res.status(response.code!).json(response);
 }
+export async function getForumByNameHandler(
+  req: Request<{ forumName: string }>,
+  res: Response<defaultResponse>,
+) {
+  const response = await getForumByNameService(req.params.forumName);
+  return res.status(response.code!).json(response);
+}
+
