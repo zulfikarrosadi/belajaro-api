@@ -49,6 +49,11 @@ export async function updateForumHandler(
   const response = await updateForumService(forumdata);
   return res.status(response.code!).json(response);
 }
+
+export async function deleteForumHandler(req: Request, res: Response) {
+  console.log('NOT IMPLEMENTED');
+}
+
 export async function getForumByNameHandler(
   req: Request<{ forumName: string }>,
   res: Response<defaultResponse>,
