@@ -1,13 +1,14 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Forum } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export type ForumData = {
+  forumId?: number;
   forumName: string;
   summary: string;
   description: string;
-  profilePicture: string;
-  banner: string;
+  profilePicture?: string;
+  banner?: string;
   tags: string[];
 };
 
