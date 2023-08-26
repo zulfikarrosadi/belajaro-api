@@ -51,6 +51,7 @@ model User {
   profilePicture String?     @map("profile_picture") @db.VarChar(250)
   comment        Comment[]
   post           Thread[]
+  UserForum      UserForum[]
 
   @@map("users")
 }
@@ -64,6 +65,7 @@ model Forum {
   profilePicture String?     @map("profile_picture") @db.VarChar(250)
   forum_tags     ForumTags[]
   Thread         Thread[]
+  UserForum      UserForum[]
 
   @@map("forums")
 }
@@ -84,4 +86,15 @@ model ForumTags {
 
   @@id([forum_id, tag_id])
   @@map("forum_tags")
+}
+
+model UserForum {
+  user_id  Int
+  forum_id Int
+  joinedAt DateTime @default(now()) @map("joined_at") @db.Timestamp()
+  forums   Forum    @relation(fields: [forum_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user     User     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, forum_id])
+  @@map("user_forum")
 }
