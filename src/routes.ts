@@ -10,6 +10,8 @@ import {
   createForumHandler,
   deleteForumHandler,
   getForumByNameHandler,
+  joinForumHandler,
+  leaveForumHandler,
   updateForumHandler,
 } from './controllers/forumController';
 import {
@@ -93,4 +95,10 @@ export default function routes(app: Express) {
     updateForumHandler,
   );
   app.delete('/forums/:forumId', deleteForumHandler);
+  app.post('/api/v1/forums/:forumId/join', verifyUserAuth, joinForumHandler);
+  app.delete(
+    '/api/v1/forums/:forumId/leave',
+    verifyUserAuth,
+    leaveForumHandler,
+  );
 }
