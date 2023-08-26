@@ -1,10 +1,11 @@
-import { Forum } from '@prisma/client';
-import { Request, Response, Express } from 'express';
+import { Request, Response } from 'express';
 import { defaultResponse } from '../global';
 import { ForumData } from '../repositories/forumRepository';
 import {
   createForumService,
   getForumByNameService,
+  joinForumService,
+  leaveForumService,
   updateForumService,
 } from '../services/forumService';
 
