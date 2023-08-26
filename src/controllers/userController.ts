@@ -10,6 +10,9 @@ export async function createUserHandler(
 ) {
   try {
     const user = await createUserService(req.body);
+    if (user.status === 'fail') {
+      throw user;
+    }
 
     const { accessToken, refreshToken } = createToken({
       email: user.data.email,
