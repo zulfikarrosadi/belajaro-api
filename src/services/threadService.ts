@@ -38,9 +38,18 @@ export async function getThreadByIdService(
 export async function createThreadService(
   thread: Thread,
   userId: number,
+  forumId: number,
 ): Promise<defaultResponse> {
-  const result = await createThread(thread, userId);
-  return { status: 'success', code: 201, data: result };
+  try {
+    const result = await createThread(thread, userId, forumId);
+    return { status: 'success', code: 201, data: result };
+  } catch (error: any) {
+    return {
+      status: 'fail',
+      code: 400,
+      error: { message: 'please join the forum before create any thread' },
+    };
+  }
 }
 
 export async function updateThreadService(
