@@ -21,10 +21,13 @@ const storage = multer.diskStorage({
         );
         break;
       case FIELD_NAME.FORUM_PROFILE_PICTURE:
-        dir = path.join(__dirname, `../../assets/forumProfilePicture`);
+        dir = path.join(
+          __dirname,
+          `../../assets/${FIELD_NAME.FORUM_PROFILE_PICTURE}`,
+        );
         break;
       case FIELD_NAME.FORUM_BANNER:
-        dir = path.join(__dirname, `../../assets/forumBanner`);
+        dir = path.join(__dirname, `../../assets/${FIELD_NAME.FORUM_BANNER}`);
         break;
       default:
         dir = path.join(__dirname, '../../assets/thread');
@@ -35,7 +38,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (req: Request, file: Express.Multer.File, callback) => {
+const fileFilter = (req: Request, file: Express.Multer.File, callback: any) => {
   const validFormat = ['.jpg', '.png', '.jpeg'];
   const { mimetype } = file;
   const fileFormat = path.extname(file.originalname.toLowerCase());
@@ -44,7 +47,12 @@ const fileFilter = (req: Request, file: Express.Multer.File, callback) => {
     return callback(null, true);
   }
 
-  return callback(new Error('invalid file format'), false);
+  return callback(
+    new Error(
+      'invalid file format, please only upload file with .png or .jpg extension',
+    ),
+    false,
+  );
 };
 
 export default multer({
