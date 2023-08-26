@@ -74,3 +74,20 @@ export async function joinForumService(
     };
   }
 }
+
+export async function leaveForumService(
+  userId: number,
+  forumId: number,
+): Promise<defaultResponse> {
+  try {
+    const result = await leaveForum(userId, forumId);
+
+    return { status: 'success', code: 204 };
+  } catch (error) {
+    return {
+      status: 'fail',
+      code: 404,
+      error: { message: 'fail to leave forum, please try again' },
+    };
+  }
+}
