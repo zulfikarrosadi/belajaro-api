@@ -14,9 +14,20 @@ export function validateRequest(schema: AnyZodObject) {
     } catch (error: any) {
       return res.status(400).json({
         status: 'fail',
-        message: 'validation error',
-        error: error.issues,
+        error: {
+          message: 'validation error',
+          details: mapZodError(error),
+        },
       });
     }
   };
+}
+
+function mapZodError(error: ZodError) {
+  return error.issues.map((issue) => {
+    return {
+      path: issue.path,
+      message: issue.message,
+    };
+  });
 }
