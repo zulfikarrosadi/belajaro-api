@@ -56,3 +56,12 @@ export async function updateForum(
   return result;
 }
 
+export async function getForumByName(
+  name: string,
+): Promise<Omit<Forum, 'banner' | 'summary'>[]> {
+  const forums = await prisma.forum.findMany({
+    where: { name: name },
+    select: { id: true, name: true, description: true, profilePicture: true },
+  });
+  return forums;
+}
