@@ -1,6 +1,13 @@
 import ErrorFactory from '../errors/errorFactory';
 import { defaultResponse } from '../global';
-import { createForum, ForumData } from '../repositories/forumRepository';
+import {
+  createForum,
+  ForumData,
+  getForumByName,
+  joinForum,
+  leaveForum,
+  updateForum,
+} from '../repositories/forumRepository';
 
 export async function createForumService(
   data: ForumData,
