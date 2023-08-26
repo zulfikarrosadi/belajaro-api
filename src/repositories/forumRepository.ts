@@ -85,3 +85,15 @@ export async function joinForum(userId: number, forumId: number) {
   });
   return result;
 }
+
+export async function leaveForum(userId: number, forumId: number) {
+  const result = await prisma.userForum.delete({
+    where: {
+      user_id_forum_id: {
+        forum_id: forumId,
+        user_id: userId,
+      },
+    },
+  });
+  return result;
+}
