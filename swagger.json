@@ -782,9 +782,6 @@
                     "path": {
                       "type": "string"
                     },
-                    "value": {
-                      "types": "string"
-                    },
                     "message": {
                       "type": "string"
                     }
