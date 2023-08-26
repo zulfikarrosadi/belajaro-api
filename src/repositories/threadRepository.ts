@@ -58,7 +58,7 @@ export async function createThread(
 export async function updateThread(
   thread: Thread,
   author_id: number,
-): Promise<Pick<Thread, 'id'>> {
+): Promise<Pick<Thread, 'id'> | any> {
   try {
     const threadId = await prisma.thread.update({
       where: {
@@ -78,7 +78,10 @@ export async function updateThread(
   }
 }
 
-export async function deleteThread(threadId: number, author_id: number) {
+export async function deleteThread(
+  threadId: number,
+  author_id: number,
+): Promise<{ threadId: number } | any> {
   try {
     const deletedThread = await prisma.thread.delete({
       where: { id: threadId, AND: { user: { id: author_id } } },
