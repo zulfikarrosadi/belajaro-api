@@ -40,9 +40,7 @@ export async function signInHandler(
         path: '/auth/refresh',
       })
       .json({ status: 'success', data: { email, id: response.userId } });
-  } catch (error) {
-    console.log(error);
-
+  } catch (error: any) {
     return res.status(400).json({ status: 'fail', error });
   }
 }
