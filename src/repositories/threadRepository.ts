@@ -19,24 +19,40 @@ export async function getThreadById({ id }: { id: number }) {
 export async function createThread(
   thread: Thread,
   userId: number,
-): Promise<Pick<Thread, 'id'>> {
-  const result = await prisma.thread.create({
+  forumId:number
+) {
+  const newThread = await prisma.thread.create({
     data: {
+      forum: {
+        connect: {
+          id: forumId,
+          UserForum: {
+            some: {
+              forum_id: forumId,
+              user_id: userId,
+            },
+          },
+        },
+      },
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
       title: thread.title,
       content: thread.content,
       published: thread.published,
-      user: {
-        connect: { id: userId },
-      },
-      forum: {
-        connect: { id: thread.forum_id },
-      },
-      updated_at: new Date().toISOString(),
     },
-    select: { id: true },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      created_at: true,
+      forum: { select: { id: true, name: true } },
+      user: { select: { id: true, profilePicture: true, firstname: true } },
+    },
   });
-
-  return { id: result.id };
+  return newThread;
 }
 
 export async function updateThread(
