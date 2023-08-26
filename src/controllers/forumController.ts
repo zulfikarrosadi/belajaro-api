@@ -13,15 +13,18 @@ export async function createForumHandler(
   req: Request<{}, {}, ForumData>,
   res: Response<defaultResponse>,
 ) {
-  const response = await createForumService({
+  const forumdata: ForumData = {
     forumName: req.body.forumName,
-    // @ts-ignore
-    profilePicture: req.files?.profilePicture[0].filename,
-    // @ts-ignore
-    banner: req.files?.banner[0].filename,
     summary: req.body.summary,
     description: req.body.description,
     tags: req.body.tags,
-  });
+  };
+  if (req.files?.forumBanner) {
+    forumdata.banner = req.files?.forumBanner[0].filename;
+  }
+  if (req.files?.forumProfilePicture) {
+    forumdata.profilePicture = req.files?.forumProfilePicture[0].filename;
+  }
+  const response = await createForumService(forumdata);
   return res.status(response.code!).json(response);
 }
