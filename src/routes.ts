@@ -57,11 +57,11 @@ export default function routes(app: Express) {
   app.use(deserializeUser);
   app.use(verifyUserAuth);
 
-  app.post('/threads', createThreadHandler);
-  app.get('/threads', getThreadsHandler);
-  app.get('/threads/:threadId', getThreadByIdHandler);
-  app.delete('/threads/:threadId', deleteThreadHandler);
-  app.put('/threads/:threadId', updateThreadHandler);
+  app.post('/api/v1/forums/:forumId/threads', createThreadHandler);
+  app.get('/api/v1/threads', getThreadsHandler);
+  app.get('/api/v1/threads/:threadId', getThreadByIdHandler);
+  app.delete('/api/v1/threads/:threadId', deleteThreadHandler);
+  app.put('/api/v1/threads/:threadId', updateThreadHandler);
 
   app.put(
     '/users',
