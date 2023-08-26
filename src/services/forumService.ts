@@ -31,3 +31,17 @@ export async function createForumService(
     };
   }
 }
+
+export async function updateForumService(
+  forum: ForumData,
+): Promise<defaultResponse> {
+  try {
+    const result = await updateForum(forum);
+    if (!result) {
+      throw ErrorFactory.createNotFoundError('forum is not found');
+    }
+    return { status: 'success', code: 200, data: result };
+  } catch (error: any) {
+    return { status: 'fail', code: 404, error: { message: error.message } };
+  }
+}
