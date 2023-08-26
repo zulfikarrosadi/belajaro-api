@@ -30,7 +30,7 @@ export async function getThreadByIdService(
       throw ErrorFactory.createNotFoundError('thread not found');
     }
     return { status: 'success', code: 200, data: thread };
-  } catch (error) {
+  } catch (error: any) {
     return { status: 'fail', code: 404, error };
   }
 }
