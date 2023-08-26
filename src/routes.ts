@@ -82,9 +82,9 @@ export default function routes(app: Express) {
     validateRequest(createForumSchema),
     createForumHandler,
   );
-  app.get('/forums/:forumName', getForumByNameHandler);
+  app.get('/api/v1/forums/:forumName', getForumByNameHandler);
   app.put(
-    '/forums/:forumId',
+    '/api/v1/forums/:forumId',
     formDataParser(
       uploadPhoto.fields([
         { name: FIELD_NAME.FORUM_PROFILE_PICTURE, maxCount: 1 },
