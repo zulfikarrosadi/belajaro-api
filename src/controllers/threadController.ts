@@ -28,11 +28,14 @@ export async function getThreadByIdHandler(
 }
 
 export async function createThreadHandler(
-  req: Request<{}, {}, Thread>,
+  req: Request<{ forumId: string }, {}, Thread>,
   res: Response<defaultResponse>,
 ) {
-  const userId = req.user.id;
-  const result = await createThreadService(req.body, userId);
+  const result = await createThreadService(
+    req.body,
+    parseInt(req.user.id, 10),
+    parseInt(req.params.forumId, 10),
+  );
   return res.status(result.code!).json(result);
 }
 
