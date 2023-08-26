@@ -57,3 +57,20 @@ export async function getForumByNameService(
     return { status: 'fail', code: 404, error: { message: error.message } };
   }
 }
+
+export async function joinForumService(
+  userId: number,
+  forumId: number,
+): Promise<defaultResponse> {
+  try {
+    const result = await joinForum(userId, forumId);
+
+    return { status: 'success', code: 200, data: result };
+  } catch (error) {
+    return {
+      status: 'fail',
+      code: 400,
+      error: { message: 'fail to join forum, please try again' },
+    };
+  }
+}
