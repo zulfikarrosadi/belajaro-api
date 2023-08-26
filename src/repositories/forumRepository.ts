@@ -32,3 +32,27 @@ export async function createForum(
   });
   return result;
 }
+
+export async function updateForum(
+  forumData: ForumData,
+): Promise<{ id: number }> {
+  const result = await prisma.forum.update({
+    where: { id: forumData.forumId },
+    data: {
+      name: forumData.forumName,
+      description: forumData.description,
+      profilePicture: forumData.profilePicture,
+      banner: forumData.banner,
+      summary: forumData.summary,
+      forum_tags: {
+        deleteMany: {},
+        createMany: {
+          data: forumData.tags.map((tag) => ({ tag_id: parseInt(tag) })),
+        },
+      },
+    },
+    select: { id: true },
+  });
+  return result;
+}
+
