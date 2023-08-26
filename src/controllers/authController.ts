@@ -1,4 +1,4 @@
-import { users } from '@prisma/client';
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import ErrorFactory from '../errors/errorFactory';
 import { cookieSecure, defaultResponse } from '../global';
@@ -9,7 +9,7 @@ import {
 } from '../services/authService';
 
 export async function signInHandler(
-  req: Request<{}, {}, Pick<users, 'email' | 'password'>>,
+  req: Request<{}, {}, Pick<User, 'email' | 'password'>>,
   res: Response<defaultResponse>,
 ) {
   const { email, password } = req.body;
