@@ -57,3 +57,12 @@ export async function getForumByNameHandler(
   return res.status(response.code!).json(response);
 }
 
+export async function joinForumHandler(
+  req: Request<{ forumId: string }>,
+  res: Response,
+) {
+  const userId = parseInt(req.user.id, 10);
+  const forumId = parseInt(req.params.forumId);
+  const result = await joinForumService(userId, forumId);
+  return res.status(result.code!).json(result);
+}
