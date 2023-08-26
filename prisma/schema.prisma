@@ -43,12 +43,12 @@ model Thread {
 }
 
 model User {
-  id             Int       @id @default(autoincrement())
-  email          String    @unique @db.VarChar(255)
-  password       String    @db.VarChar(255)
-  firstname      String    @db.VarChar(250)
-  lastname       String?   @db.VarChar(250)
-  profilePicture String?   @map("profile_picture") @db.VarChar(250)
+  id             Int         @id @default(autoincrement())
+  email          String      @unique @db.VarChar(255)
+  password       String      @db.VarChar(255)
+  firstname      String      @db.VarChar(250)
+  lastname       String?     @db.VarChar(250)
+  profilePicture String?     @map("profile_picture") @db.VarChar(250)
   comment        Comment[]
   post           Thread[]
 
