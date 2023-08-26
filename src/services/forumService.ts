@@ -43,3 +43,17 @@ export async function updateForumService(
     return { status: 'fail', code: 404, error: { message: error.message } };
   }
 }
+
+export async function getForumByNameService(
+  name: string,
+): Promise<defaultResponse> {
+  try {
+    const forums = await getForumByName(name);
+    if (!forums.length) {
+      throw ErrorFactory.createNotFoundError('forum not found');
+    }
+    return { status: 'success', code: 200, data: forums };
+  } catch (error: any) {
+    return { status: 'fail', code: 404, error: { message: error.message } };
+  }
+}
