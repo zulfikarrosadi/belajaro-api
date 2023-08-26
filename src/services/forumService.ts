@@ -22,8 +22,6 @@ export async function createForumService(
     }
     return { status: 'success', code: 201, data: result };
   } catch (error: any) {
-    console.log(error);
-
     return {
       status: 'fail',
       code: 400,
