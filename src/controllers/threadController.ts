@@ -40,11 +40,12 @@ export async function createThreadHandler(
 }
 
 export async function updateThreadHandler(
-  req: Request<{}, {}, Thread>,
+  req: Request<{ threadId: string }, {}, Thread>,
   res: Response<defaultResponse>,
 ) {
   const userId = parseInt(req.user.id, 10);
-  const updatedThread = await updateThreadService(req.body, userId);
+  const threadId = parseInt(req.params.threadId, 10);
+  const updatedThread = await updateThreadService(req.body, userId, threadId);
   return res.status(updatedThread.code!).json(updatedThread);
 }
 
