@@ -6,6 +6,7 @@ import {
   getThreadByIdService,
   getThreadsService,
   updateThreadService,
+  upvoteThreadService,
 } from '../services/threadService';
 import { Thread } from '@prisma/client';
 
@@ -58,4 +59,15 @@ export async function deleteThreadHandler(
   const id = parseInt(threadId, 10);
   const deletedThread = await deleteThreadService(id, userId);
   return res.sendStatus(deletedThread);
+}
+
+export async function upvoteThreadHandler(
+  req: Request<{ threadId: string }>,
+  res: Response,
+) {
+  const result = await upvoteThreadService(
+    parseInt(req.params.threadId, 10),
+    parseInt(req.user.id, 10),
+  );
+  return res.status(result.code!).json(result);
 }
