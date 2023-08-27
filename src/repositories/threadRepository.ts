@@ -62,7 +62,7 @@ export async function updateThread(
   threadId: number,
 ): Promise<Pick<Thread, 'id'> | any> {
   try {
-    const threadId = await prisma.thread.update({
+    const result = await prisma.thread.update({
       where: {
         id: threadId,
       },
@@ -83,7 +83,7 @@ export async function updateThread(
         user: { select: { id: true, firstname: true, profilePicture: true } },
       },
     });
-    return threadId;
+    return result;
   } catch (error) {
     return error;
   }
