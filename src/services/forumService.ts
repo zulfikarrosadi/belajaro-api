@@ -20,7 +20,18 @@ export async function createForumService(
         { path: 'description', value: data.description },
       ]);
     }
-    return { status: 'success', code: 201, data: result };
+
+    const tags = result.forum_tags.map((data) => {
+      return {
+        id: data.tags.id,
+        name: data.tags.name,
+      };
+    });
+    return {
+      status: 'success',
+      code: 201,
+      data: { ...result, forum_tags: tags },
+    };
   } catch (error: any) {
     return {
       status: 'fail',
@@ -38,7 +49,17 @@ export async function updateForumService(
     if (!result) {
       throw ErrorFactory.createNotFoundError('forum is not found');
     }
-    return { status: 'success', code: 200, data: result };
+    const tags = result.forum_tags.map((data) => {
+      return {
+        id: data.tags.id,
+        name: data.tags.name,
+      };
+    });
+    return {
+      status: 'success',
+      code: 200,
+      data: { ...result, forum_tags: tags },
+    };
   } catch (error: any) {
     return { status: 'fail', code: 404, error: { message: error.message } };
   }
