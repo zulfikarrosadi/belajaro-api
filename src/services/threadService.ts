@@ -11,6 +11,7 @@ import {
   getThreadById,
   getThreads,
   updateThread,
+  upvoteThread,
 } from '../repositories/threadRepository';
 
 export async function getThreadsService(): Promise<defaultResponse> {
@@ -80,4 +81,20 @@ export async function deleteThreadService(
     return 400;
   }
   return deletedThread;
+}
+
+export async function upvoteThreadService(
+  threadId: number,
+  userId: number,
+): Promise<defaultResponse> {
+  try {
+    const upvote = await upvoteThread(threadId, userId);
+    return { status: 'success', code: 201, data: upvote };
+  } catch (error) {
+    return {
+      status: 'fail',
+      code: 400,
+      error: { message: 'cannot upvote thread, please try again' },
+    };
+  }
 }
