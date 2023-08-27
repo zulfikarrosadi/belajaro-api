@@ -38,6 +38,7 @@ model Thread {
   comment    Comment[]
   user       User      @relation(fields: [author_id], references: [id], onDelete: NoAction)
   forum      Forum     @relation(fields: [forum_id], references: [id], onDelete: Cascade)
+  Upvote     Upvote[]
 
   @@map("threads")
 }
@@ -52,6 +53,7 @@ model User {
   comment        Comment[]
   post           Thread[]
   UserForum      UserForum[]
+  Upvote         Upvote[]
 
   @@map("users")
 }
@@ -97,4 +99,14 @@ model UserForum {
 
   @@id([user_id, forum_id])
   @@map("user_forum")
+}
+
+model Upvote {
+  user_id   Int
+  thread_id Int
+  user      User   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  thread    Thread @relation(fields: [thread_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, thread_id])
+  @@map("upvotes")
 }
