@@ -19,7 +19,7 @@ export async function getThreadById({ id }: { id: number }) {
 export async function createThread(
   thread: Thread,
   userId: number,
-  forumId:number
+  forumId: number,
 ) {
   const newThread = await prisma.thread.create({
     data: {
@@ -48,6 +48,7 @@ export async function createThread(
       title: true,
       content: true,
       created_at: true,
+      published: true,
       forum: { select: { id: true, name: true } },
       user: { select: { id: true, profilePicture: true, firstname: true } },
     },
