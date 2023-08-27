@@ -12,9 +12,15 @@ export type ForumData = {
   tags: string[];
 };
 
-export async function createForum(
-  forumData: ForumData,
-): Promise<{ id: number }> {
+export async function createForum(forumData: ForumData): Promise<{
+  id: number;
+  name: string;
+  summary: string;
+  description: string | null;
+  profilePicture: string | null;
+  banner: string | null;
+  forum_tags: { tags: { name: string; id: number } }[];
+}> {
   const result = await prisma.forum.create({
     data: {
       name: forumData.forumName,
@@ -28,14 +34,30 @@ export async function createForum(
         },
       },
     },
-    select: { id: true },
+    select: {
+      id: true,
+      name: true,
+      summary: true,
+      description: true,
+      profilePicture: true,
+      banner: true,
+      forum_tags: {
+        select: { tags: { select: { name: true, id: true } } },
+      },
+    },
   });
   return result;
 }
 
-export async function updateForum(
-  forumData: ForumData,
-): Promise<{ id: number }> {
+export async function updateForum(forumData: ForumData): Promise<{
+  id: number;
+  name: string;
+  summary: string;
+  description: string | null;
+  profilePicture: string | null;
+  banner: string | null;
+  forum_tags: { tags: { name: string; id: number } }[];
+}> {
   const result = await prisma.forum.update({
     where: { id: forumData.forumId },
     data: {
@@ -51,7 +73,17 @@ export async function updateForum(
         },
       },
     },
-    select: { id: true },
+    select: {
+      id: true,
+      name: true,
+      summary: true,
+      description: true,
+      profilePicture: true,
+      banner: true,
+      forum_tags: {
+        select: { tags: { select: { name: true, id: true } } },
+      },
+    },
   });
   return result;
 }
