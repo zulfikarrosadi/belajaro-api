@@ -1,6 +1,4 @@
 import { PrismaClient, Thread } from '@prisma/client';
-import BadRequest from '../errors/badRequestError';
-import NotFound from '../errors/notFoundError';
 
 const prisma = new PrismaClient();
 
