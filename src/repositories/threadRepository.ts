@@ -101,3 +101,11 @@ export async function deleteThread(
     return error;
   }
 }
+
+export async function upvoteThread(threadId: number, userId: number) {
+  const upvote = await prisma.upvote.create({
+    data: { thread_id: threadId, user_id: userId },
+    select: { thread_id: true, user_id: true },
+  });
+  return upvote;
+}
