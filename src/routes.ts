@@ -47,12 +47,16 @@ export default function routes(app: Express) {
     swaggerUIExpress.setup(swaggerDocs),
   );
   app.post(
-    '/auth/signup',
+    '/api/v1/auth/signup',
     validateRequest(createUserSchema),
     createUserHandler,
   );
-  app.post('/auth/signin', validateRequest(userSignInSchema), signInHandler);
-  app.post('/auth/refresh', refreshTokenHandler);
+  app.post(
+    '/api/v1/auth/signin',
+    validateRequest(userSignInSchema),
+    signInHandler,
+  );
+  app.post('/api/v1/auth/refresh', refreshTokenHandler);
 
   app.use(deserializeUser);
   app.use(verifyUserAuth);
@@ -64,12 +68,12 @@ export default function routes(app: Express) {
   app.put('/api/v1/threads/:threadId', updateThreadHandler);
 
   app.put(
-    '/users',
+    '/api/v1/users',
     formDataParser(uploadPhoto.single(FIELD_NAME.USER_PROFILE_PICTURE)),
     validateRequest(updateUserSchema),
     updateUserHandler,
   );
-  app.delete('/auth/signout', signOutHandler);
+  app.delete('/api/v1/auth/signout', signOutHandler);
 
   app.post(
     '/api/v1/forums',
@@ -94,7 +98,7 @@ export default function routes(app: Express) {
     validateRequest(updateForumSchema),
     updateForumHandler,
   );
-  app.delete('/forums/:forumId', deleteForumHandler);
+  app.delete('/api/v1/forums/:forumId', deleteForumHandler);
   app.post('/api/v1/forums/:forumId/join', verifyUserAuth, joinForumHandler);
   app.delete(
     '/api/v1/forums/:forumId/leave',
