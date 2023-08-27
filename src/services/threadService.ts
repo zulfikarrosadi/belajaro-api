@@ -55,8 +55,9 @@ export async function createThreadService(
 export async function updateThreadService(
   thread: Thread,
   userId: number,
+  threadId: number,
 ): Promise<defaultResponse> {
-  const updatedThread = await updateThread(thread, userId);
+  const updatedThread = await updateThread(thread, userId, threadId);
   if (updatedThread instanceof PrismaClientValidationError) {
     return {
       status: 'fail',
