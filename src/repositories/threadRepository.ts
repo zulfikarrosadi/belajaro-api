@@ -58,19 +58,29 @@ export async function createThread(
 
 export async function updateThread(
   thread: Thread,
-  author_id: number,
+  authorId: number,
+  threadId: number,
 ): Promise<Pick<Thread, 'id'> | any> {
   try {
     const threadId = await prisma.thread.update({
       where: {
-        id: thread.id,
+        id: threadId,
       },
       data: {
         title: thread.title,
         content: thread.content,
         updated_at: new Date().toISOString(),
         published: thread.published,
-        user: { connect: { id: author_id } },
+        user: { connect: { id: authorId } },
+      },
+      select: {
+        title: true,
+        content: true,
+        updated_at: true,
+        created_at: true,
+        published: true,
+        forum: { select: { name: true, id: true } },
+        user: { select: { id: true, firstname: true, profilePicture: true } },
       },
     });
     return threadId;
