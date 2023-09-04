@@ -1,4 +1,4 @@
-import { PrismaClient, Thread } from '@prisma/client';
+import { PrismaClient, Thread, ThreadReply } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -108,4 +108,42 @@ export async function upvoteThread(threadId: number, userId: number) {
     select: { thread_id: true, user_id: true },
   });
   return upvote;
+}
+
+export async function replyThread(
+  threadReply: ThreadReply,
+  threadParentId: number,
+  userId: number,
+) {
+  const result = await prisma.threadReply.create({
+    data: {
+      content: threadReply.content,
+      thread: {
+        connect: {
+          id: threadParentId,
+        },
+      },
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      thread: {
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          created_at: true,
+        },
+      },
+      user: { select: { id: true, firstname: true, profilePicture: true } },
+    },
+  });
+
+  return result;
 }
