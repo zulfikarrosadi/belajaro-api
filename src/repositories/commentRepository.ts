@@ -42,3 +42,19 @@ export async function deleteComment(userId: number, commentId: number) {
     select: { id: true },
   });
 }
+
+export async function getCommentById(commentId: number) {
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id: commentId,
+    },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      user: { select: { id: true, firstname: true, profilePicture: true } },
+    },
+  });
+
+  return comment;
+}
