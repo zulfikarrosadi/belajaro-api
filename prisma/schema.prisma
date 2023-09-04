@@ -27,33 +27,35 @@ model Comment {
 }
 
 model Thread {
-  id         Int       @id @default(autoincrement())
-  title      String    @db.VarChar(250)
-  content    String
-  published  Boolean   @default(false)
-  created_at DateTime  @default(now()) @db.Timestamp(6)
-  updated_at DateTime  @updatedAt
-  author_id  Int
-  forum_id   Int
-  comment    Comment[]
-  user       User      @relation(fields: [author_id], references: [id], onDelete: NoAction)
-  forum      Forum     @relation(fields: [forum_id], references: [id], onDelete: Cascade)
-  Upvote     Upvote[]
+  id          Int           @id @default(autoincrement())
+  title       String        @db.VarChar(250)
+  content     String
+  published   Boolean       @default(false)
+  created_at  DateTime      @default(now()) @db.Timestamp(6)
+  updated_at  DateTime      @updatedAt
+  author_id   Int
+  forum_id    Int
+  comment     Comment[]
+  user        User          @relation(fields: [author_id], references: [id], onDelete: NoAction)
+  forum       Forum         @relation(fields: [forum_id], references: [id], onDelete: Cascade)
+  Upvote      Upvote[]
+  ThreadReply ThreadReply[]
 
   @@map("threads")
 }
 
 model User {
-  id             Int         @id @default(autoincrement())
-  email          String      @unique @db.VarChar(255)
-  password       String      @db.VarChar(255)
-  firstname      String      @db.VarChar(250)
-  lastname       String?     @db.VarChar(250)
-  profilePicture String?     @map("profile_picture") @db.VarChar(250)
+  id             Int           @id @default(autoincrement())
+  email          String        @unique @db.VarChar(255)
+  password       String        @db.VarChar(255)
+  firstname      String        @db.VarChar(250)
+  lastname       String?       @db.VarChar(250)
+  profilePicture String?       @map("profile_picture") @db.VarChar(250)
   comment        Comment[]
   post           Thread[]
   UserForum      UserForum[]
   Upvote         Upvote[]
+  ThreadReply    ThreadReply[]
 
   @@map("users")
 }
@@ -109,4 +111,16 @@ model Upvote {
 
   @@id([user_id, thread_id])
   @@map("upvotes")
+}
+
+model ThreadReply {
+  id             Int      @id @default(autoincrement())
+  content        String   @db.VarChar(500)
+  threadParentId Int      @map("thread_parent_id")
+  userId         Int      @map("user_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  thread         Thread   @relation(fields: [threadParentId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
+
+  @@map("thread_reply")
 }
