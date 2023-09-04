@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { defaultResponse } from '../global';
 import {
   createThreadService,
+  deleteReplyThreadService,
   deleteThreadService,
   getThreadByIdService,
   getThreadsService,
@@ -84,4 +85,16 @@ export async function replyThreadHandler(
   );
 
   return res.status(result.code!).json(result);
+}
+
+export async function deleteReplyThreadHandler(
+  req: Request<{ threadReplyId: string }>,
+  res: Response,
+) {
+  const result = await deleteReplyThreadService(
+    parseInt(req.params.threadReplyId, 10),
+    parseInt(req.user.id, 10),
+  );
+
+  return res.sendStatus(result);
 }
