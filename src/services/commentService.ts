@@ -22,3 +22,12 @@ export async function createCommentService(
     };
   }
 }
+
+export async function deleteCommentService(userId: number, commentId: number) {
+  try {
+    await deleteComment(userId, commentId);
+    return 204;
+  } catch (error) {
+    return 404;
+  }
+}
