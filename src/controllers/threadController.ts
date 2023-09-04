@@ -5,10 +5,11 @@ import {
   deleteThreadService,
   getThreadByIdService,
   getThreadsService,
+  replyThreadService,
   updateThreadService,
   upvoteThreadService,
 } from '../services/threadService';
-import { Thread } from '@prisma/client';
+import { Thread, ThreadReply } from '@prisma/client';
 
 export async function getThreadsHandler(
   req: Request,
@@ -69,5 +70,18 @@ export async function upvoteThreadHandler(
     parseInt(req.params.threadId, 10),
     parseInt(req.user.id, 10),
   );
+  return res.status(result.code!).json(result);
+}
+
+export async function replyThreadHandler(
+  req: Request<{ threadParentId: string }, {}, ThreadReply>,
+  res: Response,
+) {
+  const result = await replyThreadService(
+    req.body,
+    parseInt(req.params.threadParentId, 10),
+    parseInt(req.user.id, 10),
+  );
+
   return res.status(result.code!).json(result);
 }

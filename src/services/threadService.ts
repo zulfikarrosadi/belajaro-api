@@ -1,4 +1,4 @@
-import { Thread } from '@prisma/client';
+import { Thread, ThreadReply } from '@prisma/client';
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
@@ -10,6 +10,7 @@ import {
   deleteThread,
   getThreadById,
   getThreads,
+  replyThread,
   updateThread,
   upvoteThread,
 } from '../repositories/threadRepository';
@@ -95,6 +96,23 @@ export async function upvoteThreadService(
       status: 'fail',
       code: 400,
       error: { message: 'cannot upvote thread, please try again' },
+    };
+  }
+}
+
+export async function replyThreadService(
+  threadReply: ThreadReply,
+  threadParentId: number,
+  userId: number,
+): Promise<defaultResponse> {
+  try {
+    const result = await replyThread(threadReply, threadParentId, userId);
+    return { status: 'success', code: 201, data: result };
+  } catch (error) {
+    return {
+      status: 'fail',
+      code: 400,
+      error: { message: 'cannot reply this thread, please try again' },
     };
   }
 }
