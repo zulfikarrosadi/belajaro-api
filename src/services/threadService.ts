@@ -7,6 +7,7 @@ import ErrorFactory from '../errors/errorFactory';
 import { defaultResponse } from '../global';
 import {
   createThread,
+  deleteReplyThread,
   deleteThread,
   getThreadById,
   getThreads,
@@ -114,5 +115,17 @@ export async function replyThreadService(
       code: 400,
       error: { message: 'cannot reply this thread, please try again' },
     };
+  }
+}
+
+export async function deleteReplyThreadService(
+  threadReplyId: number,
+  userId: number,
+) {
+  try {
+    await deleteReplyThread(threadReplyId, userId);
+    return 204;
+  } catch (error) {
+    return 404;
   }
 }

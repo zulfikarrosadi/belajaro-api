@@ -147,3 +147,10 @@ export async function replyThread(
 
   return result;
 }
+
+export async function deleteReplyThread(threadReplyId: number, userId: number) {
+  const result = await prisma.threadReply.delete({
+    where: { id: threadReplyId, userId },
+  });
+  return result;
+}

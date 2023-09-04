@@ -22,6 +22,7 @@ import {
   createThreadHandler,
   upvoteThreadHandler,
   replyThreadHandler,
+  deleteReplyThreadHandler,
 } from './controllers/threadController';
 import {
   createUserHandler,
@@ -75,6 +76,7 @@ export default function routes(app: Express) {
   app.put('/api/v1/threads/:threadId', updateThreadHandler);
   app.post('/api/v1/threads/:threadId/upvote', upvoteThreadHandler);
   app.post('/api/v1/threads/:threadParentId/reply', replyThreadHandler);
+  app.delete('/api/v1/threads/:threadReplyId/reply', deleteReplyThreadHandler);
 
   app.put(
     '/api/v1/users',
