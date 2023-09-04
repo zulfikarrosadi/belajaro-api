@@ -29,3 +29,13 @@ export async function deleteCommentHandler(
   );
   return res.sendStatus(result);
 }
+
+export async function getCommentByIdHandler(
+  req: Request<{ commentId: string }>,
+  res: Response,
+) {
+  const result = await getCommentByIdService(
+    parseInt(req.params.commentId, 10),
+  );
+  return res.status(result.code!).json(result);
+}
