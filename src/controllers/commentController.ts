@@ -18,3 +18,14 @@ export async function createCommentHandler(
 
   return res.status(result.code!).json(result);
 }
+
+export async function deleteCommentHandler(
+  req: Request<{ commentId: string }>,
+  res: Response,
+) {
+  const result = await deleteCommentService(
+    parseInt(req.user.id, 10),
+    parseInt(req.params.commentId, 10),
+  );
+  return res.sendStatus(result);
+}
