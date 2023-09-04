@@ -39,6 +39,11 @@ import {
 import swaggerDocs from '../swagger.json';
 import uploadPhoto from './helpers/uploadPhoto';
 import { FIELD_NAME } from './global';
+import {
+  createCommentHandler,
+  deleteCommentHandler,
+  getCommentByIdHandler,
+} from './controllers/commentController';
 
 export default function routes(app: Express) {
   app.get('/api/healthcheck', (req, res) => res.sendStatus(200));
@@ -107,4 +112,8 @@ export default function routes(app: Express) {
     verifyUserAuth,
     leaveForumHandler,
   );
+
+  app.get('/api/v1/threads/comments/:commentId', getCommentByIdHandler);
+  app.post('/api/v1/threads/:threadId/comments', createCommentHandler);
+  app.delete('/api/v1/threads/comments/:commentId', deleteCommentHandler);
 }
