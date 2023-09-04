@@ -33,3 +33,12 @@ export async function createComment(
 
   return comment;
 }
+
+export async function deleteComment(userId: number, commentId: number) {
+  const comment = await prisma.comment.delete({
+    where: {
+      id: commentId,
+    },
+    select: { id: true },
+  });
+}
