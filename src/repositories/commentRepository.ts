@@ -38,6 +38,7 @@ export async function deleteComment(userId: number, commentId: number) {
   const comment = await prisma.comment.delete({
     where: {
       id: commentId,
+      AND: { user_id: userId },
     },
     select: { id: true },
   });
