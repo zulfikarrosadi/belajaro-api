@@ -31,3 +31,17 @@ export async function deleteCommentService(userId: number, commentId: number) {
     return 404;
   }
 }
+
+export async function getCommentByIdService(
+  commentId: number,
+): Promise<defaultResponse> {
+  const comment = await getCommentById(commentId);
+  if (!comment) {
+    return {
+      status: 'fail',
+      code: 404,
+      error: { message: 'comment not found' },
+    };
+  }
+  return { status: 'success', code: 200, data: comment };
+}
