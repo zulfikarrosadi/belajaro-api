@@ -4,6 +4,7 @@ import {
   createThreadService,
   deleteReplyThreadService,
   deleteThreadService,
+  getJoinedForumThreadsService,
   getThreadByIdService,
   getThreadsService,
   replyThreadService,
@@ -97,4 +98,12 @@ export async function deleteReplyThreadHandler(
   );
 
   return res.sendStatus(result);
+}
+
+export async function getJoinedForumThreadsHandler(
+  req: Request,
+  res: Response,
+) {
+  const result = await getJoinedForumThreadsService(parseInt(req.user.id, 10));
+  return res.status(result.code!).json(result);
 }
