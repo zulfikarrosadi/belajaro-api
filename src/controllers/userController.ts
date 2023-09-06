@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { createUserService, updateUserService } from '../services/userService';
+import { createUserService, getUserProfileService, updateUserService } from '../services/userService';
 import { cookieSecure, defaultResponse } from '../global';
 import { createToken } from '../services/authService';
 
@@ -52,4 +52,9 @@ export async function updateUserHandler(
     profilePicture: req.file?.filename ?? '',
   });
   return res.status(response.code!).json(response);
+}
+
+export async function getUserProfileHandler(req: Request, res: Response) {
+  const result = await getUserProfileService(parseInt(req.user.id, 10));
+  return res.status(result.code!).json(result);
 }
