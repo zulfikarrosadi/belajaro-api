@@ -23,9 +23,11 @@ import {
   upvoteThreadHandler,
   replyThreadHandler,
   deleteReplyThreadHandler,
+  getJoinedForumThreadsHandler,
 } from './controllers/threadController';
 import {
   createUserHandler,
+  getUserProfileHandler,
   updateUserHandler,
 } from './controllers/userController';
 import { deserializeUser } from './middlewares/deserializeUser';
@@ -77,7 +79,9 @@ export default function routes(app: Express) {
   app.post('/api/v1/threads/:threadId/upvote', upvoteThreadHandler);
   app.post('/api/v1/threads/:threadParentId/reply', replyThreadHandler);
   app.delete('/api/v1/threads/:threadReplyId/reply', deleteReplyThreadHandler);
+  app.get('/api/v1/forums/threads', getJoinedForumThreadsHandler);
 
+  app.get('/api/v1/users', getUserProfileHandler);
   app.put(
     '/api/v1/users',
     formDataParser(uploadPhoto.single(FIELD_NAME.USER_PROFILE_PICTURE)),
