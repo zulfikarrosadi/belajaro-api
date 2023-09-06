@@ -9,6 +9,7 @@ import {
   createThread,
   deleteReplyThread,
   deleteThread,
+  getJoinedForumThreads,
   getThreadById,
   getThreads,
   replyThread,
@@ -128,4 +129,43 @@ export async function deleteReplyThreadService(
   } catch (error) {
     return 404;
   }
+}
+
+export async function getJoinedForumThreadsService(
+  userId: number,
+): Promise<defaultResponse> {
+  const threads = await getJoinedForumThreads(userId);
+  if(!threads.length) {
+    return {status: 'success', code:200, data: []}
+  }
+
+  const mappedData = threads.map((data) => {
+    return {
+      forums: {
+        id: data.forums.id,
+        name: data.forums.name,
+        profilePicture: data.forums.profilePicture,
+        joinedAt: data.joinedAt,
+        threads: data.forums.Thread.map((thread) => {
+          return {
+            id: thread.id,
+            title: thread.title,
+            content: thread.content,
+            createdAt: thread.created_at,
+            user: {
+              id: thread.user.id,
+              firstName: thread.user.firstname,
+              profilePicture: thread.user.profilePicture,
+            },
+            count: {
+              upvote: thread._count.Upvote,
+              comment: thread._count.comment,
+              threadReply: thread._count.ThreadReply,
+            },
+          };
+        }),
+      },
+    };
+  });
+  return { status: 'success', code: 200, data: mappedData };
 }
