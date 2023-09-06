@@ -48,3 +48,25 @@ export async function updateUser(user: User) {
 
   return updatedUser;
 }
+
+export async function getUserProfile(userId: number) {
+  const userProfile = await prisma.user.findUnique({
+    where: {
+      id: userId
+    },
+    select: {
+      id: true, firstname: true, profilePicture: true, post: {
+        take: 50,
+        where: { published: true },
+        select: {
+          title: true, content: true, created_at: true,
+          forum: {
+            select: { id: true, name: true }
+          }
+        }
+      }
+    }
+  });
+
+  return userProfile;
+}
