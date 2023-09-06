@@ -154,3 +154,36 @@ export async function deleteReplyThread(threadReplyId: number, userId: number) {
   });
   return result;
 }
+
+export async function getJoinedForumThreads(userId: number) {
+  const threads = await prisma.userForum.findMany({
+    where: {
+      user_id: userId,
+    },
+    include: {
+      forums: {
+        include: {
+          Thread: {
+            take: 100,
+            where: {
+              published: true,
+            },
+            include: {
+              user: {
+                select: { id: true, firstname: true, profilePicture: true },
+              },
+              _count: {
+                select: {
+                  Upvote: {},
+                  ThreadReply: {},
+                  comment: {},
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  return threads;
+}
