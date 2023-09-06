@@ -1,9 +1,8 @@
 import { User } from '@prisma/client';
-import BadRequest from '../errors/badRequestError';
 import ErrorFactory from '../errors/errorFactory';
 import { defaultResponse } from '../global';
 import { hashPassword } from '../helpers/passwordHelper';
-import { createUser, updateUser } from '../repositories/userRepository';
+import { createUser, getUserProfile, updateUser } from '../repositories/userRepository';
 
 export async function createUserService(user: User): Promise<defaultResponse> {
   const hashedPassword = await hashPassword(user.password);
@@ -45,4 +44,9 @@ export async function updateUserService(user: User): Promise<defaultResponse> {
       error: { message: 'fail to update user' },
     };
   }
+}
+
+export async function getUserProfileService(userId: number): Promise<defaultResponse> {
+  const userProfile = await getUserProfile(userId)
+  return { status: 'success', code: 200, data: userProfile }
 }
